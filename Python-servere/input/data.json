@@ -1,0 +1,885 @@
+{
+  "companyName": "Empathi",
+  "version": "2.02.4",
+  "Author": "Sai",
+  "Comment": "This is a sample JSON file",
+  "Date": "2021-09-01",
+  "targetScopeTable": [
+    { "applicationType": "Web", "address": "http://www.empathi.com" }
+  ],
+  "userDeatialTable": [{ "url": "http://www.empathi.com", "username": "sai" }],
+  "summary": [{ "vulnerability": "XSS", "risk": "High" }],
+  "securityTool": [
+    { "name": "Burp Suite", "desc": "Web Application Security Testing" },
+    { "name": "ZAP", "desc": "Web Application Security Testing" }
+  ],
+  "pieChart": {
+    "values": [
+      { "name": "critical", "value": 3 },
+      { "name": "high", "value": 10 },
+      { "name": "medium", "value": 5 },
+      { "name": "low", "value": 2 }
+    ],
+    "image": ""
+  },
+  "criticals": [
+    {
+      "name": "Privilege Escalation",
+      "desc": "Privilege escalation occurs when a user or attacker gains elevated access rights beyond their authorized privileges. In a web application or system, this can happen due to improper access control mechanisms, vulnerabilities in business logic, or insecure configurations. Privilege escalation can be either horizontal (gaining access to another user's data or functionalities with the same access level) or vertical (gaining higher-level privileges, such as admin rights).\n When testing for privilege escalation, the objective is to assess if lower-privileged users can perform actions or access resources that should be restricted to higher-privileged users (e.g., modifying data, accessing sensitive functions, or gaining administrative control).",
+      "impacts": [
+        {
+          "name": "Horizontal Privilege Escalation",
+          "desc": "Users can access or modify data belonging to other users at the same privilege level, leading to data breaches and unauthorized data manipulation."
+        },
+        {
+          "name": "Vertical Privilege Escalation",
+          "desc": "An attacker can gain admin-level privileges, allowing them to modify system settings, access restricted resources, or control the entire application or system, potentially leading to complete system compromise."
+        },
+        {
+          "name": "Data Integrity Risks",
+          "desc": "Privileged actions (e.g., modifying database records, changing configurations) performed by unauthorized users can lead to significant data integrity issues."
+        },
+        {
+          "name": "Confidentiality and Privacy Breaches",
+          "desc": "Unauthorized access to sensitive user data (such as financial or personal information) could result in privacy violations and data leaks."
+        }
+      ],
+      "cvssScore": 9.0,
+      "mitigations": [
+        {
+          "name": " Avoid Storing Sensitive Data in Local Storage",
+          "desc": [
+            " Local storage is inherently insecure because it's accessible via JavaScript. Instead of storing sensitive data like authentication tokens in local storage, use secure cookies (with the HttpOnly and Secure flags) that cannot be accessed via client-side JavaScript"
+          ]
+        },
+        {
+          "name": "Use Short-Lived Tokens",
+          "desc": [
+            "Implement short-lived tokens (such as JWTs) and refresh tokens. This reduces the risk if tokens are compromised, as they will expire quickly. Also, refresh tokens should be stored more securely, preferably in secure cookies."
+          ]
+        },
+        {
+          "name": "Token Binding",
+          "desc": [
+            "Bind tokens to specific user attributes like IP addresses, browser fingerprints, or device identifiers, making it harder for an attacker to reuse stolen tokens in a different environment."
+          ]
+        },
+        {
+          "name": "Implement Proper Cross-Site Scripting Protection",
+          "desc": [
+            "Use strong input validation and output encoding to prevent XSS vulnerabilities, which attackers commonly use to steal tokens from local storage. Use modern frameworks and libraries that automatically sanitize and escape user input to prevent XSS."
+          ]
+        },
+        {
+          "name": "Use Content Security Policy",
+          "desc": [
+            "Enforce a Content Security Policy to mitigate the risk of token theft via XSS by limiting the sources from which scripts can be executed."
+          ]
+        }
+      ],
+      "evidences": [
+        {
+          "image": "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
+          "name": "Two different role-based user"
+        },
+        {
+          "image": "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
+          "name": "no dashboard access vs dashboard access",
+          "desc": [
+            "Two user accounts, the left side of the image is the provider admin (least privileged) and the right side is the customer admin (highest privileged).",
+            "Go to developer tools of both users and on console, upon entering the below script which is: \n for (let i = 0; i < localStorage.length; i++) {const key = localStorage.key(i);const value = localStorage.getItem(key);console.log(`${key}: ${value}`);}"
+          ]
+        },
+        {
+          "name": "Script for extracting local storage informatio",
+          "image": "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D"
+        }
+      ]
+    },
+    {
+      "name": "SQL Injection",
+      "desc": "SQL Injection is a critical security vulnerability that occurs when an application fails to properly validate or sanitize user input that is used in SQL queries. This can allow attackers to manipulate the application's database queries to access, modify, or delete unauthorized data.",
+      "impacts": [
+        {
+          "name": "Data Breach",
+          "desc": "Attackers can extract sensitive information from the database, including user credentials, personal information, and business data."
+        },
+        {
+          "name": "Data Manipulation",
+          "desc": "Malicious users can modify or delete database records, compromising data integrity."
+        },
+        {
+          "name": "System Compromise",
+          "desc": "In some cases, SQL injection can lead to complete system compromise through command execution."
+        }
+      ],
+      "cvssScore": 8.5,
+      "mitigations": [
+        {
+          "name": "Use Parameterized Queries",
+          "desc": [
+            "Always use parameterized queries or prepared statements instead of concatenating strings for SQL queries."
+          ]
+        },
+        {
+          "name": "Input Validation",
+          "desc": [
+            "Implement strict input validation and sanitization for all user-supplied data."
+          ]
+        },
+        {
+          "name": "Least Privilege",
+          "desc": [
+            "Use database accounts with minimal required privileges for application operations."
+          ]
+        }
+      ],
+      "evidences": [
+        {
+          "image": "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
+          "name": "SQL Injection Test Case",
+          "desc": [
+            "Example of successful SQL injection payload and resulting unauthorized data access"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Remote Code Execution",
+      "desc": "Remote Code Execution (RCE) vulnerabilities allow attackers to execute arbitrary code on the target system remotely. This can occur through various attack vectors such as file upload vulnerabilities, command injection, or deserialization flaws.",
+      "impacts": [
+        {
+          "name": "System Compromise",
+          "desc": "Attackers can execute malicious code to take control of the server or application."
+        },
+        {
+          "name": "Data Theft",
+          "desc": "RCE can lead to unauthorized access to sensitive system files and data."
+        },
+        {
+          "name": "Service Disruption",
+          "desc": "Malicious code execution can result in system crashes or service unavailability."
+        }
+      ],
+      "cvssScore": 9.8,
+      "mitigations": [
+        {
+          "name": "Input Validation",
+          "desc": [
+            "Implement strict input validation and sanitization for all user-supplied data, especially file uploads."
+          ]
+        },
+        {
+          "name": "Security Headers",
+          "desc": [
+            "Implement security headers like Content-Security-Policy to prevent unauthorized code execution."
+          ]
+        },
+        {
+          "name": "Regular Updates",
+          "desc": [
+            "Keep all software components, frameworks, and libraries up to date to prevent known RCE vulnerabilities."
+          ]
+        }
+      ],
+      "evidences": [
+        {
+          "image": "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
+          "name": "RCE Proof of Concept",
+          "desc": [
+            "Demonstration of successful code execution through vulnerability exploitation"
+          ]
+        }
+      ]
+    }
+  ],
+  "highs": [
+    {
+      "name": "Cross-Site Scripting (XSS)",
+      "desc": "Cross-site scripting vulnerability allows attackers to inject malicious scripts into web pages viewed by users.",
+      "impacts": [
+        {
+          "name": "Session Hijacking",
+          "desc": "Attackers can steal user session tokens and impersonate legitimate users."
+        },
+        {
+          "name": "Data Theft",
+          "desc": "Malicious scripts can access and exfiltrate sensitive user data."
+        }
+      ],
+      "cvssScore": 7.5,
+      "mitigations": [
+        {
+          "name": "Input Validation",
+          "desc": ["Implement proper input validation and output encoding."]
+        },
+        {
+          "name": "CSP Headers",
+          "desc": [
+            "Use Content Security Policy headers to restrict script execution."
+          ]
+        }
+      ],
+      "evidences": [
+        {
+          "image": "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
+          "name": "XSS POC",
+          "desc": ["Example of successful XSS payload execution"]
+        }
+      ]
+    },
+    {
+      "name": "Insecure Direct Object References",
+      "desc": "IDOR vulnerabilities allow attackers to access unauthorized resources by manipulating reference parameters.",
+      "impacts": [
+        {
+          "name": "Unauthorized Access",
+          "desc": "Attackers can access other users' data by manipulating identifiers."
+        }
+      ],
+      "cvssScore": 7.0,
+      "mitigations": [
+        {
+          "name": "Access Controls",
+          "desc": [
+            "Implement proper authorization checks for all resource accesses."
+          ]
+        }
+      ],
+      "evidences": [
+        {
+          "image": "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
+          "name": "IDOR Example",
+          "desc": [
+            "Demonstration of unauthorized access through parameter manipulation"
+          ]
+        }
+      ]
+    }
+  ],
+  "mediums": [
+    {
+      "name": "Missing Security Headers",
+      "desc": "Application lacks important security headers that help protect against common web vulnerabilities.",
+      "impacts": [
+        {
+          "name": "Increased Attack Surface",
+          "desc": "Absence of security headers makes the application more vulnerable to various attacks."
+        }
+      ],
+      "cvssScore": 5.0,
+      "mitigations": [
+        {
+          "name": "Implementation",
+          "desc": [
+            "Add recommended security headers like HSTS, CSP, and X-Frame-Options."
+          ]
+        }
+      ],
+      "evidences": [
+        {
+          "image": "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
+          "name": "Header Check",
+          "desc": ["Security header scan results showing missing headers"]
+        }
+      ]
+    }
+  ],
+  "web": true,
+  "api": false,
+  "chatbot": false,
+
+  "vulnerabilities": [
+    {
+      "id": "A01",
+      "name": "Broken Access Control",
+      "desc": "Access controls enforce policies so that users cannot act outside of their intended permissions. Failures typically lead to unauthorized information disclosure or modification, destruction of data, or performing a business function outside the user's limits.",
+      "pass": true,
+      "fail": false,
+      "reference": "Refer to 3.2.1"
+    },
+    {
+      "id": "A02",
+      "name": "Cryptographic Failures",
+      "desc": "Cryptographic failures involve protecting data in transit and at rest. This includes passwords, credit card numbers, health records, personal information, and business secrets that require extra protection, especially if that data falls under privacy laws such as GDPR or regulations like PCI DSS for financial data.",
+      "pass": false,
+      "fail": true,
+      "reference": "Refer to 3.5.4"
+    },
+    {
+      "id": "A03",
+      "name": "Injection",
+      "desc": "An application is at risk when user-supplied data is not validated, filtered, or sanitized by the application; dynamic queries or non-parameterized calls without context-aware escaping are used directly in the interpreter; hostile data is used within object-relational mapping (ORM) search parameters to extract additional sensitive records; or when hostile data is directly used or concatenated.",
+      "pass": false,
+      "fail": true,
+      "reference": "Refer to 3.3.1, 3.3.3, 3.3.4, 3.3.5, 3.4.3, 3.4.5"
+    },
+    {
+      "id": "A04",
+      "name": "Insecure Design",
+      "desc": "According to OWASP, 'Secure design is a culture and methodology that constantly evaluates threats and ensures that code is robustly designed and tested to prevent known attack methods. Secure design requires a secure development lifecycle, some form of secure design pattern or paved road component library or tooling, and threat modeling.'",
+      "pass": false,
+      "fail": true,
+      "reference": "Refer to 3.4.1, 3.4.4, 3.5.3"
+    },
+    {
+      "id": "A05",
+      "name": "Security Misconfiguration",
+      "desc": "This category includes such things as missing security hardening across any part of the application stack, improperly configured permissions on cloud services, any unnecessary features that are enabled or installed, and unchanged default accounts or passwords. The former category XML External Entities (XXE) is now included in Security Misconfiguration.",
+      "pass": false,
+      "fail": true,
+      "reference": "Refer to 3.5.1, 3.5.2"
+    },
+    {
+      "id": "A06",
+      "name": "Vulnerable and Outdated Components",
+      "desc": "This category includes any software that is vulnerable, unsupported, or out of date. If you do not know the versions of your components – including all direct and indirect dependencies – or you do not regularly scan and test your components, you are likely at risk.",
+      "pass": true,
+      "fail": false,
+      "reference": null
+    },
+    {
+      "id": "A07",
+      "name": "Identification and Authentication Failures",
+      "desc": "Security risk occurs when a user's identity, authentication, or session management is not properly handled, allowing attackers to exploit passwords, keys, session tokens, or implementation flaws to assume users' identities temporarily or permanently.",
+      "pass": false,
+      "fail": true,
+      "reference": "Refer to 3.2.2, 3.4.2"
+    },
+    {
+      "id": "A08",
+      "name": "Software and Data Integrity Failures",
+      "desc": "This includes software updates, critical data, and CI/CD pipelines that are implemented without verification. An example of this includes objects or data encoded or serialized into a structure that an attacker can modify. Another example is an application that relies upon plugins, libraries, or modules from untrusted sources. Insecure CI/CD pipelines that can introduce the potential for unauthorized access, malicious code, or system compromise also fit into this category. Lastly, applications with auto-update functionality, in which updates are downloaded without sufficient integrity verification and applied to a previously trusted application, are considered software and data integrity failures because attackers could infiltrate the supply chain to distribute their own malicious updates.",
+      "pass": false,
+      "fail": false,
+      "reference": null
+    },
+    {
+      "id": "A09",
+      "name": "Security Logging and Monitoring Failures",
+      "desc": "This category includes errors in detecting, escalating, and responding to active breaches. Without logging and monitoring, breaches cannot be detected. Examples of insufficient logging, detection, and monitoring include not logging auditable events like logins or failed logins, warnings and errors that generate inadequate or unclear log messages, or logs that are only stored locally. Failures in this category impact visibility, incident alerting, and forensics.",
+      "pass": false,
+      "fail": false,
+      "reference": null
+    },
+    {
+      "id": "A10",
+      "name": "Server-Side Request Forgery",
+      "desc": "Server-Side Request Forgery occurs when a web application fetches a remote resource without validating the user-supplied URL. An attacker can coerce the application to send a crafted request to an unexpected destination, even when protected by a firewall, VPN, or another type of network ACL. Though SSRF shows a relatively low incidence rate in the data OWASP reviewed, this category was added based on the industry survey results; users are concerned that SSRF attacks are becoming more prevalent and potentially more severe due to increased use of cloud services and the complexity of architecture.",
+      "pass": false,
+      "fail": true,
+      "reference": "Refer to 3.3.2"
+    }
+  ],
+  "testPerfom": [
+    {
+      "name": "Information Gathering",
+      "step": [
+        {
+          "name": "Conduct Search Engine Discovery Reconnaissance for Information Leakage",
+          "pass": false,
+          "fail": false,
+          "noAns": false
+        },
+        {
+          "name": "Fingerprint Web Server",
+          "pass": false,
+          "fail": false,
+          "noAns": false
+        },
+        {
+          "name": "Review Webserver Metafiles for Information Leakage",
+          "pass": true,
+          "fail": true,
+          "noAns": false
+        },
+        {
+          "name": "Enumerate Applications on Webserver",
+          "pass": true,
+          "fail": false,
+          "noAns": true
+        },
+        {
+          "name": "Review Webpage Content for Information Leakage",
+          "pass": false,
+          "fail": true,
+          "noAns": false
+        },
+        {
+          "name": "Identify Application Entry Points",
+          "pass": true,
+          "fail": false,
+          "noAns": true
+        },
+        {
+          "name": "Map Execution Paths Through Application",
+          "pass": false,
+          "fail": false,
+          "noAns": false
+        },
+        {
+          "name": "Fingerprint Web Application Framework",
+          "pass": true,
+          "fail": false,
+          "noAns": false
+        },
+        {
+          "name": "Fingerprint Web Application",
+          "pass": true,
+          "fail": true,
+          "noAns": true
+        },
+        {
+          "name": "Map Application Architecture",
+          "pass": false,
+          "fail": false,
+          "noAns": true
+        }
+      ]
+    },
+    {
+      "name": "Configuration & Deployment Management Testing",
+      "step": [
+        {
+          "name": "Test Network Infrastructure Configuration",
+          "pass": true,
+          "fail": true,
+          "noAns": false
+        },
+        {
+          "name": "Test Application Platform Configuration",
+          "pass": false,
+          "fail": true,
+          "noAns": false
+        },
+        {
+          "name": "Test File Extensions Handling for Sensitive Information",
+          "pass": false,
+          "fail": true,
+          "noAns": false
+        },
+        {
+          "name": "Review Old Backup and Unreferenced Files for Sensitive Information",
+          "pass": false,
+          "fail": true,
+          "noAns": false
+        },
+        {
+          "name": "Enumerate Infrastructure and Application Admin Interfaces",
+          "pass": true,
+          "fail": false,
+          "noAns": true
+        },
+        {
+          "name": "Test HTTP Methods",
+          "pass": true,
+          "fail": false,
+          "noAns": true
+        },
+        {
+          "name": "Test HTTP Strict Transport Security",
+          "pass": false,
+          "fail": true,
+          "noAns": false
+        },
+        {
+          "name": "Test File Permission",
+          "pass": true,
+          "fail": true,
+          "noAns": false
+        },
+        {
+          "name": "Test Cloud Storage",
+          "pass": false,
+          "fail": false,
+          "noAns": true
+        },
+        {
+          "name": "Testing for Content Security Policy",
+          "pass": false,
+          "fail": false,
+          "noAns": false
+        },
+        {
+          "name": "Test Path Confusion",
+          "pass": true,
+          "fail": true,
+          "noAns": false
+        }
+      ]
+    },
+    {
+      "name": "Identity Management Testing",
+      "step": [
+        {
+          "name": "Test Role Definitions",
+          "pass": true,
+          "fail": true,
+          "noAns": false
+        },
+        {
+          "name": "Test User Registration Process",
+          "pass": true,
+          "fail": true,
+          "noAns": true
+        },
+        {
+          "name": "Test Account Provisioning Process",
+          "pass": false,
+          "fail": true,
+          "noAns": true
+        },
+        {
+          "name": "Testing for Account Enumeration and Guessable User Account",
+          "pass": false,
+          "fail": false,
+          "noAns": true
+        },
+        {
+          "name": "Testing for Weak or Unenforced Username Policy",
+          "pass": true,
+          "fail": true,
+          "noAns": false
+        },
+        {
+          "name": "Map Application Architecture",
+          "pass": true,
+          "fail": false,
+          "noAns": true
+        }
+      ]
+    },
+    {
+      "name": "Authentication Testing",
+      "step": [
+        {
+          "name": "Testing for Credentials Transported over an Encrypted Channel",
+          "pass": true,
+          "fail": false,
+          "noAns": true
+        },
+        {
+          "name": "Testing for Default Credentials",
+          "pass": true,
+          "fail": false,
+          "noAns": false
+        },
+        {
+          "name": "Testing for Weak Lock Out Mechanism",
+          "pass": true,
+          "fail": true,
+          "noAns": true
+        },
+        {
+          "name": "Testing for Bypassing Authentication Schema",
+          "pass": false,
+          "fail": true,
+          "noAns": true
+        },
+        {
+          "name": "Testing for Vulnerable Remember Password",
+          "pass": false,
+          "fail": false,
+          "noAns": true
+        },
+        {
+          "name": "Testing for Browser Cache Weaknesses",
+          "pass": false,
+          "fail": false,
+          "noAns": true
+        },
+        {
+          "name": "Testing for Weak Password Policy",
+          "pass": false,
+          "fail": false,
+          "noAns": true
+        },
+        {
+          "name": "Testing for Weak Security Question Answer",
+          "pass": false,
+          "fail": true,
+          "noAns": false
+        },
+        {
+          "name": "Testing for Weak Password Change or Reset Functionalities",
+          "pass": false,
+          "fail": true,
+          "noAns": true
+        },
+        {
+          "name": "Testing for Weaker Authentication in Alternative Channel",
+          "pass": false,
+          "fail": false,
+          "noAns": true
+        },
+        {
+          "name": "Testing Multi-Factor Authentication (MFA)",
+          "pass": false,
+          "fail": true,
+          "noAns": false
+        }
+      ]
+    },
+    {
+      "name": "Authorization Testing",
+      "step": [
+        {
+          "name": "Testing Directory Traversal File Include",
+          "pass": false,
+          "fail": true,
+          "noAns": true
+        },
+        {
+          "name": "Testing for Bypassing Authorization Schema",
+          "pass": false,
+          "fail": false,
+          "noAns": false
+        },
+        {
+          "name": "Testing for Privilege Escalation",
+          "pass": false,
+          "fail": true,
+          "noAns": true
+        },
+        {
+          "name": "Testing for Insecure Direct Object References",
+          "pass": true,
+          "fail": true,
+          "noAns": false
+        },
+        {
+          "name": "Testing for OAuth Weaknesses",
+          "pass": true,
+          "fail": false,
+          "noAns": true
+        },
+        {
+          "name": "Testing for OAuth Authorization Server Weaknesses",
+          "pass": false,
+          "fail": false,
+          "noAns": false
+        },
+        {
+          "name": "Testing for OAuth Client Weaknesses",
+          "pass": true,
+          "fail": true,
+          "noAns": true
+        }
+      ]
+    },
+    {
+      "name": "Session Management Testing",
+      "step": [
+        {
+          "name": "Testing for Session Management Schema",
+          "pass": false,
+          "fail": false,
+          "noAns": false
+        },
+        {
+          "name": "Testing for Cookies Attributes",
+          "pass": true,
+          "fail": false,
+          "noAns": false
+        },
+        {
+          "name": "Testing for Session Fixation",
+          "pass": true,
+          "fail": true,
+          "noAns": true
+        },
+        {
+          "name": "Testing for Exposed Session Variables",
+          "pass": false,
+          "fail": false,
+          "noAns": true
+        },
+        {
+          "name": "Testing for Cross Site Request Forgery",
+          "pass": false,
+          "fail": true,
+          "noAns": true
+        },
+        {
+          "name": "Testing for Logout Functionality",
+          "pass": false,
+          "fail": true,
+          "noAns": true
+        },
+        {
+          "name": "Testing Session Timeout",
+          "pass": true,
+          "fail": true,
+          "noAns": false
+        },
+        {
+          "name": "Testing for Session Puzzling",
+          "pass": false,
+          "fail": true,
+          "noAns": true
+        },
+        {
+          "name": "Testing for Session Hijacking",
+          "pass": false,
+          "fail": false,
+          "noAns": false
+        },
+        {
+          "name": "Testing JSON Web Tokens",
+          "pass": true,
+          "fail": true,
+          "noAns": false
+        },
+        {
+          "name": "Testing for Concurrent Sessions",
+          "pass": true,
+          "fail": false,
+          "noAns": true
+        }
+      ]
+    },
+    {
+      "name": "Input Validation Testing",
+      "step": [
+        {
+          "name": "Testing for Reflected Cross Site Scripting",
+          "pass": false,
+          "fail": true,
+          "noAns": true
+        },
+        {
+          "name": "Testing for Stored Cross Site Scripting",
+          "pass": false,
+          "fail": true,
+          "noAns": true
+        },
+        {
+          "name": "Testing for HTTP Parameter Pollution",
+          "pass": true,
+          "fail": true,
+          "noAns": true
+        },
+        {
+          "name": "Testing for SQL Injection",
+          "pass": true,
+          "fail": false,
+          "noAns": false
+        },
+        {
+          "name": "Testing for NoSQL Injection",
+          "pass": false,
+          "fail": false,
+          "noAns": false
+        },
+        {
+          "name": "Testing for LDAP Injection",
+          "pass": true,
+          "fail": true,
+          "noAns": false
+        },
+        {
+          "name": "Testing for XML Injection",
+          "pass": true,
+          "fail": true,
+          "noAns": true
+        },
+        {
+          "name": "Testing for File Inclusion",
+          "pass": true,
+          "fail": true,
+          "noAns": false
+        },
+        {
+          "name": "Testing for Command Injection",
+          "pass": true,
+          "fail": false,
+          "noAns": true
+        },
+        {
+          "name": "Testing for Format String Injection",
+          "pass": false,
+          "fail": true,
+          "noAns": false
+        },
+        {
+          "name": "Testing for HTTP Splitting",
+          "pass": false,
+          "fail": true,
+          "noAns": true
+        },
+        {
+          "name": "Testing for Server-Side Request Forgery",
+          "pass": true,
+          "fail": true,
+          "noAns": true
+        }
+      ]
+    }
+  ],
+  "conclusion": [
+    {
+      "name": "Unrestricted File Upload",
+      "desc": "Unauthorized file uploads can compromise the system; implementing strict file validation is essential."
+    },
+    {
+      "name": "Missing Security Headers",
+      "desc": "The absence of HSTS and CSP increases vulnerability to attacks; enforcing these headers is critical."
+    },
+    {
+      "name": "Privilege Escalation",
+      "desc": "Weak access controls can lead to unauthorized data access; strengthening privilege management is recommended."
+    },
+    {
+      "name": "Session Hijacking",
+      "desc": "Session hijacking risks data theft; secure session management practices are vital."
+    },
+    {
+      "name": "Session Time-out",
+      "desc": "Lack of session expiration increases unauthorized access risks; implementing automatic timeouts is necessary."
+    },
+    {
+      "name": "XSS",
+      "desc": "XSS vulnerabilities allow malicious script injections; proper input sanitization is imperative."
+    },
+    {
+      "name": "HTTP Smuggling (Protocol Downgrade)",
+      "desc": "Protocol downgrade attacks can bypass security; enhancing server configurations is crucial."
+    },
+    {
+      "name": "SSRF",
+      "desc": "SSRF vulnerabilities can be exploited for unauthorized actions; strict input validation is essential."
+    },
+    {
+      "name": "Improper Error Handling",
+      "desc": "Sensitive data exposure through error messages can inform attackers; proper error handling is needed."
+    },
+    {
+      "name": "DOM XSS",
+      "desc": "DOM-based XSS can lead to content manipulation; improving input validation is necessary."
+    },
+    {
+      "name": "HTML Injection",
+      "desc": "HTML injection allows attackers to compromise web pages; user input sanitization is essential."
+    },
+    {
+      "name": "CSS Injection",
+      "desc": "CSS injection vulnerabilities can manipulate the UI; strict validation on styles is important."
+    },
+    {
+      "name": "Client-side URL Redirect",
+      "desc": "Malicious redirects can lead to phishing; implementing strict URL checks is crucial."
+    },
+    {
+      "name": "Clickjacking",
+      "desc": "Clickjacking risks user actions being compromised; frame-busting techniques should be used."
+    },
+    {
+      "name": "Leakage of Local Storage",
+      "desc": "Exposing local storage data can lead to identity theft; proper access controls are recommended."
+    },
+    {
+      "name": "URL Redirection Using XML",
+      "desc": "XML redirection vulnerabilities increase phishing risks; strict validation on inputs is necessary."
+    }
+  ]
+}
