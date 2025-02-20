@@ -1,8 +1,16 @@
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt, { SignOptions } from "jsonwebtoken";
 
-const userSchema = new mongoose.Schema({
+export interface IUser extends Document {
+  email: string;
+  password: string;
+  history: mongoose.Types.ObjectId[];
+  generateAccessToken: () => string;
+  isPasswordCorrect: (password: string) => Promise<boolean>;
+}
+
+const userSchema = new mongoose.Schema<IUser>({
   email: {
     type: String,
     required: [true, "⚠️ Username is required"],
@@ -44,6 +52,12 @@ userSchema.methods.generateAccessToken = function () {
   } catch (error: any) {
     throw new Error(error + " in generateAccessToken");
   }
+};
+
+userSchema.methods.isPasswordCorrect = async function (
+  mypassword: string
+): Promise<boolean> {
+  return await bcrypt.compare(mypassword, this.password);
 };
 
 export const User = mongoose.model("User", userSchema);
