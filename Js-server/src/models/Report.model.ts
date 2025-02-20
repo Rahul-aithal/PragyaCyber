@@ -53,9 +53,9 @@ const ReportSchema = new mongoose.Schema({
         },
       },
     ],
-    // image: {
-    //   type: String,
-    // },
+    image: {
+      type: String,
+    },
   },
   criticals: {
     type: [mongoose.Schema.Types.ObjectId],
@@ -78,7 +78,7 @@ const ReportSchema = new mongoose.Schema({
   web: {
     type: Boolean,
     required: true,
-    default: false,
+    default: true,
   },
   api: {
     type: Boolean,
