@@ -11,4 +11,6 @@ const TargetScopeSchema = new mongoose.Schema({
   },
 });
 
-export const TargetScope = mongoose.model("TargetScope",TargetScopeSchema);
+const TargetScope = mongoose.model("TargetScope", TargetScopeSchema);
+
+export default TargetScope;

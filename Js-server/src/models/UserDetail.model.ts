@@ -1,8 +1,5 @@
 import mongoose from "mongoose";
 
-
-
-
 const UserDetailSchema = new mongoose.Schema({
   url: {
     type: String,
@@ -14,10 +11,6 @@ const UserDetailSchema = new mongoose.Schema({
   },
 });
 
+const UserDetail = mongoose.model("UserDetail", UserDetailSchema);
 
-
-
-export const UserDetail = mongoose.model(
-    "UserDetail",
-    UserDetailSchema
-  );
+export default UserDetail;

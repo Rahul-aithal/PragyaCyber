@@ -1,12 +1,14 @@
 import mongoose from "mongoose";
-import { ObjectId } from "mongoose";
 import { Request, Response } from "express";
 import { ApiError } from "../utils/ApiError";
-import { IUser, User } from "../models/User.model";
+import User, { IUser } from "../models/User.model";
 import { asyncHandler } from "../utils/asyncHandlers";
 import { ApiResponse } from "../utils/ApiResponse";
+import userType, { userSchema } from "../types/user.type";
 
-const generateAccessAndRefereshTokens = async (
+// Using user's generateAcccess Tocken we create and return the JWT token
+// JWT tocken containes user's id and singed
+const generateAccessTokens = async (
   userId: mongoose.Types.ObjectId | unknown
 ) => {
   try {
@@ -14,9 +16,9 @@ const generateAccessAndRefereshTokens = async (
     if (!user) {
       throw new ApiError(404, "User not found");
     }
-    const accessToken = user?.generateAccessToken();
+    const accessToken = user.generateAccessToken();
 
-    await user?.save({ validateBeforeSave: false });
+    await user.save({ validateBeforeSave: false });
 
     return { accessToken };
   } catch (error) {
@@ -36,24 +38,27 @@ const generateAccessAndRefereshTokens = async (
   }
 };
 
+// Using email and password specified in the userType and parse it
+// If no user with same email found then create document
+// Send JWT tocken as cookie
 const singUpUser = asyncHandler(async (req: Request, res: Response) => {
   // Extract user details from the request body
-  const { email, password } = req.body;
+  const { email, password }: userType = req.body;
 
-  // Check if a user with the same email already exists
+  await userSchema.parseAsync({ email, password });
+
   const user = await User.findOne({ email });
   if (user) {
     throw new ApiError(400, "User already exists");
   }
 
-  // Create a new user with the provided details
   const newUser: IUser = await User.create({
     password,
     email,
   });
 
   // Generate access and refresh tokens for the new user
-  const { accessToken } = await generateAccessAndRefereshTokens(newUser._id);
+  const { accessToken } = await generateAccessTokens(newUser._id);
 
   // Define cookie options for secure token storage
   const options = {
@@ -63,42 +68,30 @@ const singUpUser = asyncHandler(async (req: Request, res: Response) => {
     sameSite: "strict" as "strict" | "lax" | "none",
   };
 
-  // Set access and refresh tokens in cookies and send response
   res
     .status(201)
     .cookie("accessToken", accessToken, options)
-    .json(new ApiResponse(201, newUser));
+    .json(new ApiResponse(201, newUser)); //for dev only
 });
 
-// Login user endpoint handler
+// Use email and password and parse it, then Authorize using password
+// Set access and refresh tokens in cookies and send response
 const loginUser = asyncHandler(async (req: Request, res: Response) => {
-  // Extract username and email from request body
-  const { usn, email } = req.body;
+  const { password, email }: userType = req.body;
 
-  // Validate required fields
-  if (!usn || !email) {
-    console.log({ usn, email });
+  await userSchema.parseAsync({ email, password });
 
-    throw new ApiError(400, "Please provide both usn and email");
-  }
+  const user = await User.findOne({ email }).select(" -createdAt -updatedAt ");
 
-  // Find user by email, excluding createdAt, updatedAt, and refreshToken fields
-  const user = await User.findOne({ email })
-    .select(" -createdAt -updatedAt -refreshToken -role")
-    .populate("streak");
-
-  // Handle user not found scenario
   if (!user) {
     throw new ApiError(404, "User not found");
   }
-  // Check if user is authorized
 
-  const verify = await user.isPasswordCorrect(usn);
+  const verify = await user.isPasswordCorrect(password);
 
-  if (!verify) throw new ApiError(401, "USN is not correct");
+  if (!verify) throw new ApiError(401, "⚠️ Password is not correct");
 
-  // Generate access and refresh tokens for the user
-  const { accessToken } = await generateAccessAndRefereshTokens(user._id);
+  const { accessToken } = await generateAccessTokens(user._id);
 
   // Define cookie options for secure token storage
   const options = {
@@ -108,21 +101,15 @@ const loginUser = asyncHandler(async (req: Request, res: Response) => {
     sameSite: "none" as "strict" | "lax" | "none",
   };
 
-  // Set access and refresh tokens in cookies and send response
   res
     .status(200)
     .cookie("accessToken", accessToken, options)
-    .json(new ApiResponse(200, user));
+    .json(new ApiResponse(200, user)); //for dev only
 });
-/**
- * Handles the logout process for a user.
- *
- * @param {Request} req - The request object containing user data.
- * @param {Response} res - The response object used to send back data to the client.
- * @returns {Promise<void>} A promise that resolves when the logout process is complete.
- */
+
+// Extract user id from JWT token
+// Clear user session cookies
 const logOutUser = asyncHandler(async (req: Request, res: Response) => {
-  // Extract user id from JWT token
   const user = await User.findById(res.locals.user?._id);
   if (!user) {
     throw new ApiError(404, "User not found");
@@ -134,12 +121,11 @@ const logOutUser = asyncHandler(async (req: Request, res: Response) => {
     path: "/",
     sameSite: "strict" as "strict" | "lax" | "none",
   };
-  // Clear user session cookies
+
   res
     .status(200)
     .clearCookie("accessToken", options)
-    .clearCookie("refreshToken", options)
-    .json(new ApiResponse(200, user));
+    .json(new ApiResponse(200, user)); //for dev only
 });
 
 export { logOutUser, loginUser, singUpUser };

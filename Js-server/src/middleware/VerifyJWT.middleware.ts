@@ -2,7 +2,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import { asyncHandler } from "../utils/asyncHandlers";
 import { ApiError } from "../utils/ApiError";
 import { NextFunction, Request, Response } from "express";
-import { IUser, User } from "../models/User.model";
+import User, { IUser } from "../models/User.model";
 
 // Middleware for verifying JWT token
 const verifyJWTToken = asyncHandler(
