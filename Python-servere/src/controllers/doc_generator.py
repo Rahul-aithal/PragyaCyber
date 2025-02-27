@@ -43,7 +43,7 @@ def generate_document(templateFile: str, jsonPath: str):
         doc.render(context)
         
         # Set the output filename
-        generate_document = "src/generated_test.docx"
+        generate_document = "output/generated_test.docx"
         
         # Save the final document to disk
         doc.save(generate_document)

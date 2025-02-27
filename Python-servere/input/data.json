@@ -25,6 +25,7 @@
   "criticals": [
     {
       "name": "Privilege Escalation",
+        "OWASP": "A01",
       "desc": "Privilege escalation occurs when a user or attacker gains elevated access rights beyond their authorized privileges. In a web application or system, this can happen due to improper access control mechanisms, vulnerabilities in business logic, or insecure configurations. Privilege escalation can be either horizontal (gaining access to another user's data or functionalities with the same access level) or vertical (gaining higher-level privileges, such as admin rights).\n When testing for privilege escalation, the objective is to assess if lower-privileged users can perform actions or access resources that should be restricted to higher-privileged users (e.g., modifying data, accessing sensitive functions, or gaining administrative control).",
       "impacts": [
         {
