@@ -5,10 +5,13 @@ import {
   deleteVulnerabilityDetails,
 } from "./vulnerabilityDetail.controller";
 
-export {
+export const user = {
   logOutUser,
   loginUser,
   singUpUser,
+};
+
+export const vulnerabilityDetail = {
   createVulnerabilityDetails,
   updateVulnerabilityDetails,
   deleteVulnerabilityDetails,

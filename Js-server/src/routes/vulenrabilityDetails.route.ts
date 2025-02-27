@@ -1,15 +1,19 @@
 import { Router } from "express";
-import {
-  createVulnerabilityDetails,
-  updateVulnerabilityDetails,
-  deleteVulnerabilityDetails,
-} from "../controllers";
+import { vulnerabilityDetail } from "../controllers";
 import verifyJWTToken from "../middleware/VerifyJWT.middleware";
 
 const router = Router();
 
-router.post("/", verifyJWTToken, createVulnerabilityDetails);
-router.put("/", verifyJWTToken, updateVulnerabilityDetails);
-router.delete("/", verifyJWTToken, deleteVulnerabilityDetails);
+router.post(
+  "/",
+  verifyJWTToken,
+  vulnerabilityDetail.createVulnerabilityDetails
+);
+router.put("/", verifyJWTToken, vulnerabilityDetail.updateVulnerabilityDetails);
+router.delete(
+  "/",
+  verifyJWTToken,
+  vulnerabilityDetail.deleteVulnerabilityDetails
+);
 
 export default router;

@@ -91,10 +91,12 @@ const ReportSchema = new mongoose.Schema({
     default: false,
   },
   vulnerabilities: {
-    type: Array,
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "Vulnerability",
   },
   testPerfom: {
-    type: Array,
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "testPerfom",
   },
   conclusion: [
     {
