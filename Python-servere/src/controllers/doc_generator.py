@@ -1,7 +1,8 @@
 import json
 from docxtpl import DocxTemplate
 from typing import Any, Dict, List, Union
-from .conetxt_builder import ImageGenerate
+from .conetxt_builder import ContextGenerate
+import os
 
 # Define a custom type alias for JSON-compatible data structures
 JSONType = Union[Dict[str, Any], List[Any], str, int, float, bool, None]
@@ -37,8 +38,9 @@ def generate_document(templateFile: str, jsonPath: str):
 
         # Process the JSON data and build a context dictionary for template rendering
         # ImageGenerate handles image processing and context preparation
-        context = ImageGenerate(doc).context_builder(data)
+        contextGenerator = ContextGenerate(doc)
 
+        context = contextGenerator.context_builder(data)
         # Apply the context data to the template
         doc.render(context)
         
@@ -49,7 +51,11 @@ def generate_document(templateFile: str, jsonPath: str):
         doc.save(generate_document)
 
         print("Document generated successfully!")
-        return generate_document
+
+        print("Cleaning the downloaded files ")
+        contextGenerator.delete_downloaded()
+
+        return os.path.abspath(generate_document)
         
     except FileNotFoundError as e:
         print(f"Error: File not found - {str(e)}")

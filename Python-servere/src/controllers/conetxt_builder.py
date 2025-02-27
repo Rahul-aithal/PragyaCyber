@@ -6,13 +6,15 @@ JSONType = Union[Dict[str, Any], List[Any], str, int, float, bool, None]
 from docx.shared import Mm
 import requests
 import puremagic
+import os
 import time
 
 
-class ImageGenerate:
+class ContextGenerate:
     """
     A class for processing and generating images within document templates.
     """
+    image_download_list:List[str]=[]
 
     def __init__(self, doc):
         """
@@ -45,10 +47,10 @@ class ImageGenerate:
                 with open(save_path, 'wb') as out_file:
 
                     for chunk in response.iter_content(1024):
-
                         out_file.write(chunk)
 
                 print(f"Image downloaded to: {save_path}")
+
                 return self.process_image(save_path,size)
 
             else:
@@ -56,6 +58,7 @@ class ImageGenerate:
                 print(f"Error downloading image: {response.status_code}")
         # print("path"+ path)
         else:
+            self.image_download_list.append(os.path.abspath(path))
             return InlineImage(self.doc, path, width=Mm(size))
 
     def context_builder(self, data: JSONType) -> JSONType:
@@ -102,3 +105,10 @@ class ImageGenerate:
         else:
             # Return primitive types unchanged
             return data
+    def delete_downloaded(self):
+        for file in self.image_download_list:
+            if os.path.isfile(file):
+                print(f"The file {file} got removed 🧹")
+                os.remove(file)
+            else:
+                print("This file not found",file)
