@@ -17,6 +17,7 @@ export const vulnerabilityDetailSchema = z.object({
     })
   ),
   evidences: z.string().array().min(1),
+  type: z.enum(["criticals", "highs", "mediums", "lows"]),
 });
 
 type vulnerabilityDetailType = z.infer<typeof vulnerabilityDetailSchema>;

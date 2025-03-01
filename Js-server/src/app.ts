@@ -10,8 +10,10 @@ app.use(cookieParser());
 
 import userRouter from "./routes/user.route";
 import vulenrabilityDetailsRoute from "./routes/vulenrabilityDetails.route";
+import evidenceRout from "./routes/evidence.route";
 
 app.use("/user", userRouter);
 app.use("/vulenrabilityDetails", vulenrabilityDetailsRoute);
+app.use("/evidence", evidenceRout);
 
 export default app;

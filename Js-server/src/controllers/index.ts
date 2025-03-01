@@ -4,6 +4,11 @@ import {
   updateVulnerabilityDetails,
   deleteVulnerabilityDetails,
 } from "./vulnerabilityDetail.controller";
+import {
+  createEvidence,
+  updateEvidence,
+  deleteEvidence,
+} from "./evidence.controller";
 
 export const user = {
   logOutUser,
@@ -15,4 +20,10 @@ export const vulnerabilityDetail = {
   createVulnerabilityDetails,
   updateVulnerabilityDetails,
   deleteVulnerabilityDetails,
+};
+
+export const evidence = {
+  createEvidence,
+  updateEvidence,
+  deleteEvidence,
 };

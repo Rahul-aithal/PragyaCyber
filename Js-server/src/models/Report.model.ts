@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { InferRawDocType } from "mongoose";
 
 const ReportSchema = new mongoose.Schema({
   companyName: {
@@ -9,12 +9,12 @@ const ReportSchema = new mongoose.Schema({
     type: String,
     required: [true, "⚠️ Version is required"],
   },
-  Author: {
+  author: {
     type: String,
     required: [true, "⚠️ Author is required"],
   },
   Comment: { type: String },
-  Date: {
+  date: {
     type: Date,
     required: [true, "⚠️ Date is required"],
   },
@@ -71,7 +71,7 @@ const ReportSchema = new mongoose.Schema({
     ref: "VulnerabilityDetail",
   },
 
-  low: {
+  lows: {
     type: [mongoose.Schema.Types.ObjectId],
     ref: "VulnerabilityDetail",
   },
@@ -107,5 +107,8 @@ const ReportSchema = new mongoose.Schema({
 });
 
 const Report = mongoose.model("Report", ReportSchema);
+
+export type ReportI = InferRawDocType<typeof ReportSchema>
+
 
 export default Report;
