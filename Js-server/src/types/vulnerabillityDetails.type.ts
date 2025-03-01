@@ -1,11 +1,18 @@
 import z from "zod";
 
 export const vulnerabilityDetailSchema = z.object({
-  name: z.string(),
+  name: z.string().refine((val) => !val.includes("--") && !val.includes("';"), {
+    message: "String contains potentially malicious characters",
+  }),
   desc: z.string(),
   impacts: z.array(
     z.object({
-      name: z.string().min(1, "Name cannot be empty"), // Ensures name is a non-empty string
+      name: z
+        .string()
+        .min(1, "Name cannot be empty")
+        .refine((val) => !val.includes("--") && !val.includes("';"), {
+          message: "String contains potentially malicious characters",
+        }), // Ensures name is a non-empty string
       desc: z.string().min(1, "Description cannot be empty"), // Ensures desc is a non-empty string
     })
   ),

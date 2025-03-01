@@ -9,12 +9,12 @@ import { Request, Response } from "express";
 export const createEvidence = asyncHandler(
   async (req: Request, res: Response) => {
     const file = req.file?.path;
+    const vulnerabilityDetailId = req.params["vulnerabilityDetailId"]
     const {
       desc,
       extra,
       name,
-      vulnerabilityDetailId,
-    }: evidenceType & { vulnerabilityDetailId: string } = req.body;
+    }: evidenceType  = req.body;
     await evidenceSchema.parseAsync({
       desc,
       name,
@@ -54,14 +54,8 @@ export const createEvidence = asyncHandler(
 export const updateEvidence = asyncHandler(
   async (req: Request, res: Response) => {
     const file = req.file?.path;
-    const {
-      desc,
-      extra,
-      name,
-      vulnerabilityDetailId,
-      evidenceId,
-    }: evidenceType & { vulnerabilityDetailId: string; evidenceId: string } =
-      req.body;
+    const { vulnerabilityDetailId, evidenceId } = req.params;
+    const { desc, extra, name }: evidenceType = req.body;
     await evidenceSchema.parseAsync({
       desc,
       name,
@@ -108,10 +102,7 @@ export const updateEvidence = asyncHandler(
 
 export const deleteEvidence = asyncHandler(
   async (req: Request, res: Response) => {
-    const {
-      evidenceId,
-      vulnerabilityDetailId,
-    }: { vulnerabilityDetailId: string; evidenceId: string } = req.body;
+    const { vulnerabilityDetailId, evidenceId } = req.params;
 
     if (!vulnerabilityDetailId) {
       throw new ApiError(400, "vulnerabilityDetailId not found");

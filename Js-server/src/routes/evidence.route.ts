@@ -4,8 +4,16 @@ import verifyJWTToken from "../middleware/VerifyJWT.middleware";
 
 const router = Router();
 
-router.post("/", verifyJWTToken, evidence.createEvidence);
-router.put("/", verifyJWTToken, evidence.updateEvidence);
-router.delete("/", verifyJWTToken, evidence.deleteEvidence);
+router.post("/:vulnerabilityDetailId", verifyJWTToken, evidence.createEvidence);
+router.put(
+  "/:vulnerabilityDetailId/:evidenceId",
+  verifyJWTToken,
+  evidence.updateEvidence
+);
+router.delete(
+  "/:vulnerabilityDetailId/:evidenceId",
+  verifyJWTToken,
+  evidence.deleteEvidence
+);
 
 export default router;
