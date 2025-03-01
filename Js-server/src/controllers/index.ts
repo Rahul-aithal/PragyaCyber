@@ -30,6 +30,17 @@ import {
   updateUserDetail,
 } from "./userDetail.controller";
 
+import {
+  createVulnerability,
+  deleteVulnerability,
+  updateVulnerability,
+  getAllVulnerabilities,
+  getVulnerabilityById,
+  getVulnerabilityByVid,
+  toggleVulnerabilityFail,
+  toggleVulnerabilityPass,
+} from "./vulnerability.controller";
+
 export const user = {
   logOutUser,
   loginUser,
@@ -66,4 +77,15 @@ export const userDetail = {
   getAllUserDetails,
   getUserDetailById,
   updateUserDetail,
+};
+
+export const vulnerability = {
+  createVulnerability,
+  deleteVulnerability,
+  updateVulnerability,
+  getAllVulnerabilities,
+  getVulnerabilityById,
+  getVulnerabilityByVid,
+  toggleVulnerabilityFail,
+  toggleVulnerabilityPass,
 };

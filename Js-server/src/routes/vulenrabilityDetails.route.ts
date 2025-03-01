@@ -11,12 +11,7 @@ router.post(
   verifyReport,
   vulnerabilityDetail.createVulnerabilityDetails
 );
-router.put(
-  "/",
-  verifyJWTToken,
-  verifyReport,
-  vulnerabilityDetail.updateVulnerabilityDetails
-);
+router.put("/", verifyJWTToken, vulnerabilityDetail.updateVulnerabilityDetails);
 router.delete(
   "/",
   verifyJWTToken,
