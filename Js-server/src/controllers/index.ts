@@ -45,8 +45,24 @@ import {
   createTargetScope,
   deleteETargetScope,
   updateTargetScope,
-  getTotalApplicationType
+  getTotalApplicationType,
 } from "./targetScope.controller";
+
+import {
+  addConclusion,
+  addSecurityTool,
+  createReport,
+  deleteConclusion,
+  deleteReport,
+  deleteSecurityTool,
+  getAllReports,
+  getReportById,
+  getReportsStats,
+  updateConclusion,
+  updatePieChart,
+  updateReport,
+  updateSecurityTool,
+} from "./report.controller";
 
 // ################################################################################################################################################
 
@@ -103,5 +119,21 @@ export const targetScope = {
   createTargetScope,
   deleteETargetScope,
   updateTargetScope,
-  getTotalApplicationType
+  getTotalApplicationType,
+};
+
+export const reprot = {
+  addConclusion,
+  addSecurityTool,
+  createReport,
+  deleteConclusion,
+  deleteReport,
+  deleteSecurityTool,
+  getAllReports,
+  getReportById,
+  getReportsStats,
+  updateConclusion,
+  updatePieChart,
+  updateReport,
+  updateSecurityTool,
 };

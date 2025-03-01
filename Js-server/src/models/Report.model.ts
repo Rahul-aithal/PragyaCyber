@@ -46,7 +46,7 @@ const ReportSchema = new mongoose.Schema({
     values: [
       {
         name: {
-          type: String,
+          enum: ["critical", "high", "medium", "low"],
         },
         value: {
           type: Number,
@@ -108,7 +108,6 @@ const ReportSchema = new mongoose.Schema({
 
 const Report = mongoose.model("Report", ReportSchema);
 
-export type ReportI = InferRawDocType<typeof ReportSchema>
-
+export type ReportI = InferRawDocType<typeof ReportSchema>;
 
 export default Report;

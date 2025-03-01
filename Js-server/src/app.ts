@@ -15,6 +15,7 @@ import testPerformedRoute from "./routes/testPerformed.router";
 import userDetailRoute from "./routes/userDeatil.route";
 import vulnerabilityRoute from "./routes/vulenrabilityDetails.route";
 import targeScopeRoute from "./routes/targetScope.route";
+import reportRoute from "./routes/report.route";
 
 app.use("/user", userRouter);
 app.use("/vulenrabilityDetails", vulenrabilityDetailsRoute);
@@ -23,5 +24,6 @@ app.use("/testPerformed", testPerformedRoute);
 app.use("/userDetials", userDetailRoute);
 app.use("/vulnerability", vulnerabilityRoute);
 app.use("/targeScope", targeScopeRoute);
+app.use("/report", reportRoute);
 
 export default app;
