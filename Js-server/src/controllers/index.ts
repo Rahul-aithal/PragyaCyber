@@ -21,6 +21,15 @@ import {
   updateTestPerformed,
 } from "./testPerforme.controller";
 
+import {
+  createUserDetail,
+  deleteUserDetail,
+  findUserDetailByUsername,
+  getAllUserDetails,
+  getUserDetailById,
+  updateUserDetail,
+} from "./userDetail.controller";
+
 export const user = {
   logOutUser,
   loginUser,
@@ -48,4 +57,13 @@ export const testPerformed = {
   removeStep,
   updateStep,
   updateTestPerformed,
+};
+
+export const userDetail = {
+  createUserDetail,
+  deleteUserDetail,
+  findUserDetailByUsername,
+  getAllUserDetails,
+  getUserDetailById,
+  updateUserDetail,
 };

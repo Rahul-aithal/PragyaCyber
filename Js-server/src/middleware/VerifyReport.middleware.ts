@@ -21,16 +21,14 @@ const verifyReport = asyncHandler(
       ) as JwtPayload;
 
       // Find the user by ID from the decoded token
-      const report = await Report.findById(decodedToken._id).select(
-        "-createdAt -updatedAt -date -author -companyName -Comment -version"
-      );
+      const report = await Report.findById(decodedToken._id).select("_id");
 
       if (!report) {
         throw new ApiError(401, "Invalid Report Token");
       }
 
       // Store the user in res.locals, not req.locals
-      res.locals.report = report._id as unknown as ReportI;
+      res.locals.report = report._id;
 
       // Continue to the next middleware or route handler
       next();

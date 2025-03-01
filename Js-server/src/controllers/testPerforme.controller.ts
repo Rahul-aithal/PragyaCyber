@@ -12,7 +12,7 @@ import { Request, Response } from "express";
 export const createTestPerformed = asyncHandler(
   async (req: Request, res: Response) => {
     const { name, step }: testPerformedType = req.body;
-    const reportId = res.locals.report._id;
+    const reportId = res.locals.report;
     await testPerformedSchema.parseAsync({
       name,
       step,
@@ -75,6 +75,7 @@ export const updateTestPerformed = asyncHandler(
 export const deleteTestPerformed = asyncHandler(
   async (req: Request, res: Response) => {
     const { testPerformedId } = req.params;
+    const reportId = res.locals.repoert;
 
     if (!testPerformedId) {
       throw new ApiError(400, "testPerformedId not found");
@@ -87,6 +88,12 @@ export const deleteTestPerformed = asyncHandler(
     if (!testPerformed) {
       throw new ApiError(404, "Test performed document not found");
     }
+
+    await Report.findByIdAndUpdate(reportId, {
+      $pullAll: {
+        testPerfom: testPerformed._id,
+      },
+    });
 
     res.status(200).json(new ApiResponse(200, testPerformed._id));
   }

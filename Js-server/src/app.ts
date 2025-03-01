@@ -12,10 +12,12 @@ import userRouter from "./routes/user.route";
 import vulenrabilityDetailsRoute from "./routes/vulenrabilityDetails.route";
 import evidenceRoute from "./routes/evidence.route";
 import testPerformedRoute from "./routes/testPerformed.router";
+import userDetailRoute from "./routes/userDeatil.route";
 
 app.use("/user", userRouter);
 app.use("/vulenrabilityDetails", vulenrabilityDetailsRoute);
 app.use("/evidence", evidenceRoute);
 app.use("/testPerformed", testPerformedRoute);
+app.use("/userDetials", userDetailRoute);
 
 export default app;

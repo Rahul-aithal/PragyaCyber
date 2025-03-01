@@ -14,25 +14,13 @@ router.post(
 router.put(
   "/:testPerformedId",
   verifyJWTToken,
-  verifyReport,
   testPerformed.updateTestPerformed
 );
-router.put(
-  "/:testPerformedId",
-  verifyJWTToken,
-  verifyReport,
-  testPerformed.addStep
-);
-router.put(
-  "/:testPerformedId",
-  verifyJWTToken,
-  verifyReport,
-  testPerformed.updateStep
-);
+router.put("/:testPerformedId", verifyJWTToken, testPerformed.addStep);
+router.put("/:testPerformedId", verifyJWTToken, testPerformed.updateStep);
 router.delete(
   "/:testPerformedId/:stepIndex",
   verifyJWTToken,
-  verifyReport,
   testPerformed.removeStep
 );
 router.delete(
