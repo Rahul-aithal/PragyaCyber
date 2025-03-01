@@ -41,6 +41,15 @@ import {
   toggleVulnerabilityPass,
 } from "./vulnerability.controller";
 
+import {
+  createTargetScope,
+  deleteETargetScope,
+  updateTargetScope,
+  getTotalApplicationType
+} from "./targetScope.controller";
+
+// ################################################################################################################################################
+
 export const user = {
   logOutUser,
   loginUser,
@@ -88,4 +97,11 @@ export const vulnerability = {
   getVulnerabilityByVid,
   toggleVulnerabilityFail,
   toggleVulnerabilityPass,
+};
+
+export const targetScope = {
+  createTargetScope,
+  deleteETargetScope,
+  updateTargetScope,
+  getTotalApplicationType
 };
